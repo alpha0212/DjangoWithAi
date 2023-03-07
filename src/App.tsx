@@ -2,8 +2,8 @@ import React from 'react';
 import Webcam from 'react-webcam';
 //375, 675
 const videoConstraints = {
-  width: 1280,
-  height: 720,
+  width: 375,
+  height: 600,
   facingMode: 'environment',
 };
 const App = () => {
