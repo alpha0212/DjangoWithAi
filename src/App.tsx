@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Webcam from 'react-webcam';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 //375, 675
 const videoConstraints = {
   width: 375,
