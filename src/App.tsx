@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import styled from '@emotion/styled';
+import axios from 'axios';
 //375, 675
 const videoConstraints = {
   width: 375,
@@ -9,16 +10,35 @@ const videoConstraints = {
 };
 const App = () => {
   const [imgSrc, setImgSrc] = useState('');
-  const cameraRef = React.useRef(null) as any;
+  const [send, setSend] = useState(false);
+  const cameraRef = useRef<Webcam>(null);
   const capture = React.useCallback(() => {
-    const imageSrc = cameraRef.current.getScreenshot();
-    setImgSrc(imageSrc);
-    console.log(imageSrc);
+    const imageSrc = cameraRef.current?.getScreenshot();
+    if (imageSrc) {
+      sendData(imageSrc);
+      setImgSrc(imageSrc);
+    }
   }, [cameraRef]);
+  const sendData = (c: any) => {
+    console.log(c);
+    const headers = {
+      accept: 'application/json',
+    };
 
+    const fd = new FormData();
+    fd.append('image', c);
+
+    axios
+      .post('http://127.0.0.1:8000/api/digits/', fd, { headers: headers })
+      .then((res) => {
+        console.log(res.data);
+        setSend(true);
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="App">
-      {imgSrc ? (
+      {send ? (
         <CaptureResult src={imgSrc} />
       ) : (
         <Webcam
